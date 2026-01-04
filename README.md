@@ -42,6 +42,9 @@ The model was trained for 20,000 iterations. Below is the training loss curve, s
 
 ![Training Loss Graph](training_loss_graph.png)
 
+> [!NOTE] 
+> The initial training loss is observed to be very close to the theoretical valid initial loss of **2.302** (calculated as `-ln(0.1)` for 10 classes), which confirms that the weights were initialized correctly.
+
 ### Final Statistics
 The final evaluation on the test set yielded the following results (from `stats.json`):
 
