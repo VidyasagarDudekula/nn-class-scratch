@@ -3,9 +3,9 @@ class MLP:
     def __init__(self, *layers):
         self.layers = [layer for layer in layers]
     
-    def __call__(self, inputs):
+    def __call__(self, inputs, test=False):
         for layer in self.layers:
-            inputs = layer(inputs)
+            inputs = layer(inputs, test)
         return inputs
     
     def __repr__(self) -> str:
@@ -26,13 +26,15 @@ class MLP:
     def step(self, learning_rate=0.01):
         for layer in self.layers[::-1]:
             layer.weights += -learning_rate * layer.w_grad
-            layer.biases += -learning_rate * layer.b_grad
+            layer.batch_weights += -learning_rate * layer.batch_w_grad
+            layer.batch_biases += -learning_rate * layer.batch_b_grad
 
     def save(self, filename):
         data = {}
         for i, layer in enumerate(self.layers):
             data[f"layer_{i}_weights"] = layer.weights
-            data[f"layer_{i}_biases"] = layer.biases
+            data[f"layer_{i}_batch_weights"] = layer.batch_weights
+            data[f"layer_{i}_batch_biases"] = layer.batch_biases
         
         np.savez_compressed(filename, **data)
         print(f"Model saved to {filename}")
@@ -42,11 +44,13 @@ class MLP:
         
         for i, layer in enumerate(self.layers):
             w_key = f"layer_{i}_weights"
-            b_key = f"layer_{i}_biases"
+            batch_w_key = f"layer_{i}_batch_weights"
+            batch_b_key = f"layer_{i}_batch_biases"
             
-            if w_key in data and b_key in data:
+            if w_key in data and batch_w_key in data and batch_b_key in data:
                 layer.weights = data[w_key]
-                layer.biases = data[b_key]
+                layer.batch_weights = data[batch_w_key]
+                layer.batch_biases = data[batch_b_key]
             else:
                 print(f"Warning: Could not find weights for layer {i} in file.")
         

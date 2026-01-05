@@ -76,7 +76,7 @@ xs_test = np.array(xs_test, ndmin=2)
 ys_test = np.array(ys_test, ndmin=2)
 
 model.zero_grad()
-test_outputs = model(xs_test)
+test_outputs = model(xs_test, test=True)
 loss_test = F.CrossEntropyLoss(ys_test, test_outputs, target_value=1.0)
 print(f"Loss test:- {loss_test}")
 
