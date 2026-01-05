@@ -35,6 +35,9 @@ class MLP:
             data[f"layer_{i}_weights"] = layer.weights
             data[f"layer_{i}_batch_weights"] = layer.batch_weights
             data[f"layer_{i}_batch_biases"] = layer.batch_biases
+            if layer.running_batch_mean is not None:
+                data[f"layer_{i}_running_mean"] = layer.running_batch_mean
+                data[f"layer_{i}_running_std"] = layer.running_batch_std
         
         np.savez_compressed(filename, **data)
         print(f"Model saved to {filename}")
@@ -46,11 +49,15 @@ class MLP:
             w_key = f"layer_{i}_weights"
             batch_w_key = f"layer_{i}_batch_weights"
             batch_b_key = f"layer_{i}_batch_biases"
+            mean_key = f"layer_{i}_running_mean"
+            std_key = f"layer_{i}_running_std"
             
-            if w_key in data and batch_w_key in data and batch_b_key in data:
+            if w_key in data and batch_w_key in data and batch_b_key in data and mean_key in data and std_key in data:
                 layer.weights = data[w_key]
                 layer.batch_weights = data[batch_w_key]
                 layer.batch_biases = data[batch_b_key]
+                layer.running_batch_mean = data[mean_key]
+                layer.running_batch_std = data[std_key]
             else:
                 print(f"Warning: Could not find weights for layer {i} in file.")
         
