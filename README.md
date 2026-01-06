@@ -104,14 +104,24 @@ Below are visualizations of the activations/gradients comparing unscaled vs. sca
 #### Unscaled Weights (Vanishing Gradients)
 Notice how the values are pushed to the extremes (saturation) for Sigmoid and Tanh.
 
-| ReLU | Tanh | Sigmoid |
-| :---: | :---: | :---: |
-| ![ReLU Unscaled](<visualization images/rand_weights_<built-in method relu of type object at 0x11119f778>.png>) | ![Tanh Unscaled](<visualization images/rand_weights_<built-in method tanh of type object at 0x11119f778>.png>) | ![Sigmoid Unscaled](<visualization images/rand_weights_<built-in method sigmoid of type object at 0x11119f778>.png>) |
+**ReLU (Unscaled)**
+![ReLU Unscaled](visualization%20images/rand_weights_relu.png)
+
+**Tanh (Unscaled)**
+![Tanh Unscaled](visualization%20images/rand_weights_tanh.png)
+
+**Sigmoid (Unscaled)**
+![Sigmoid Unscaled](visualization%20images/rand_weights_sigmoid.png)
 
 #### Scaled Weights (Healthy Gradients)
 With scaling, the values stay in the active range of the activation functions.
 
-| ReLU | Tanh | Sigmoid |
-| :---: | :---: | :---: |
-| ![ReLU Scaled](<visualization images/rand_scaled_weights_<built-in method relu of type object at 0x11119f778>.png>) | ![Tanh Scaled](<visualization images/rand_scaled_weights_<built-in method tanh of type object at 0x11119f778>.png>) | ![Sigmoid Scaled](<visualization images/rand_scaled_weights_<built-in method sigmoid of type object at 0x11119f778>.png>) |
+**ReLU (Scaled)**
+![ReLU Scaled](visualization%20images/rand_scaled_weights_relu.png)
+
+**Tanh (Scaled)**
+![Tanh Scaled](visualization%20images/rand_scaled_weights_tanh.png)
+
+**Sigmoid (Scaled)**
+![Sigmoid Scaled](visualization%20images/rand_scaled_weights_sigmoid.png)
 
