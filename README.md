@@ -73,9 +73,45 @@ The introduction of Batch Normalization significantly improved convergence and f
     -   Train the MLP network.
     -   Save the trained model to `model_mnist.npz`.
     -   Save performance stats to `stats.json`.
+
     -   Display the training loss graph.
 
 3.  **Output**: The script prints the training progress and final test accuracy to the console.
 
 ## 📝 Note
 The data loading in `nn.py` assumes `datasets/mnist_train.csv` and `datasets/mnist_test.csv` exist. Ensure these files are present in the `datasets` directory.
+
+## 📉 Analysis: Importance of Weight Initialization
+
+Proper weight initialization is critical for training deep neural networks effectively. This project demonstrates the impact of weight scaling on gradient flow, particularly for activation functions like Sigmoid and Tanh.
+
+### The Problem: Unscaled Weights & Vanishing Gradients
+When weights are initialized with a standard normal distribution without scaling (e.g., `W = torch.randn(DIM_INPUT, DIM_HIDDEN)`), the variance of the activations can grow layer by layer.
+
+For saturation-based activation functions like **Sigmoid** and **Tanh**:
+-   **Sigmoid**: Squeezes inputs to $(0, 1)$. Large inputs push activations to the "flat" regions (near 0 or 1).
+-   **Tanh**: Squeezes inputs to $(-1, 1)$. Large inputs push activations to the "flat" regions (near -1 or 1).
+
+In these flat regions, the derivative (slope) is nearly zero. During backpropagation, this small gradient is multiplied across layers, causing the gradient to "vanish" effectively to zero. This prevents the weights from updating, and the model fails to learn.
+
+### The Solution: Scaled Weights
+To maintain a healthy gradient flow, weights should be scaled (e.g., `W * 0.05` or using Xavier/Kaiming initialization). This ensures that the inputs to the activation functions fall within the linear, non-flat region where the derivative is strong.
+
+### 🖼️ Visualizations
+
+Below are visualizations of the activations/gradients comparing unscaled vs. scaled weights.
+
+#### Unscaled Weights (Vanishing Gradients)
+Notice how the values are pushed to the extremes (saturation) for Sigmoid and Tanh.
+
+| ReLU | Tanh | Sigmoid |
+| :---: | :---: | :---: |
+| ![ReLU Unscaled](<visualization images/rand_weights_<built-in method relu of type object at 0x11119f778>.png>) | ![Tanh Unscaled](<visualization images/rand_weights_<built-in method tanh of type object at 0x11119f778>.png>) | ![Sigmoid Unscaled](<visualization images/rand_weights_<built-in method sigmoid of type object at 0x11119f778>.png>) |
+
+#### Scaled Weights (Healthy Gradients)
+With scaling, the values stay in the active range of the activation functions.
+
+| ReLU | Tanh | Sigmoid |
+| :---: | :---: | :---: |
+| ![ReLU Scaled](<visualization images/rand_scaled_weights_<built-in method relu of type object at 0x11119f778>.png>) | ![Tanh Scaled](<visualization images/rand_scaled_weights_<built-in method tanh of type object at 0x11119f778>.png>) | ![Sigmoid Scaled](<visualization images/rand_scaled_weights_<built-in method sigmoid of type object at 0x11119f778>.png>) |
+
